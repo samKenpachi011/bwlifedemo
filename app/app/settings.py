@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'core',
     'onboarding',
     'policy',
+    'knowledgebase',
     'corsheaders',
+
 ]
 
 MIDDLEWARE = [

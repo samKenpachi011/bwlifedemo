@@ -31,7 +31,8 @@ urlpatterns = [
     path('api/user/', include('user.urls')),
     path('api/onboarding/', include('onboarding.urls')),
     path('api/policy/', include('policy.urls')),
-]
+    path('api/knowledgebase/', include('knowledgebase.urls')),
+    ]
 
 if settings.DEBUG:
     urlpatterns += static(

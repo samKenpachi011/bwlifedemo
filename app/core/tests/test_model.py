@@ -87,6 +87,7 @@ class ModelTests(TestCase):
         path = '/vol/web/media/onboarding_example.jpg'
         self.assertEqual(onboarding_imgs.note, self.onboarding_data)
         self.assertEqual(onboarding_imgs.images.path, f'{path}')
+
     def test_create_policy_success(self):
         """Test creating Policy model"""
 
@@ -109,3 +110,41 @@ class ModelTests(TestCase):
         self.assertEqual(policy.title, 'Test Policy')
         self.assertEqual(policy.created_by.email, user.email)
         self.assertEqual(models.Policy.objects.all().count(), 1)
+
+    def test_create_knowledgebase_success(self):
+        """Test creating Knowledge base model"""
+
+        user = create_user(
+            email='test@example.com',
+            password='testpass123'
+        )
+        department = models.Department.objects.create(
+            dept_name="HR Department")
+        policy = models.Policy.objects.create(
+            user=user,
+            title='Test Policy',
+            description='This is a test policy description.',
+            created_by=user,
+            department=department,
+            document_type='article'
+        )
+
+        knowledge_base_defaults = {
+            'knowledge_title': 'Knowledge base test',
+            'content': 'test content',
+            'version': 'v1.0',
+            'knowledge_category': 'general',
+
+        }
+
+        knowledge_base = models.KnowledgeBase.objects.create(
+            user=user,
+            created_by=user,
+            department=department,
+            document_type='article',
+            linked_policy=policy, **knowledge_base_defaults
+        )
+
+        self.assertEqual(knowledge_base.knowledge_title, 'Knowledge base test')
+        self.assertEqual(knowledge_base.created_by.email, user.email)
+        self.assertEqual(models.KnowledgeBase.objects.all().count(), 1)

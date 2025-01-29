@@ -7,6 +7,7 @@ from PIL import Image
 import tempfile
 import datetime
 
+
 def create_user(**params):
     return get_user_model().objects.create_user(**params)
 
@@ -42,6 +43,7 @@ def get_image():
     _file = open(file.name, 'rb')
 
     return _file
+
 
 def document_path(instance, filename):
     """Generate a path for instance documents"""

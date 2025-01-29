@@ -46,3 +46,6 @@ admin.site.register(models.Onboarding)
 admin.site.register(models.OnboardingNoteImages)
 admin.site.register(models.OnboardingStep)
 admin.site.register(models.Policy)
+admin.site.register(models.KnowledgeBase)
+
+

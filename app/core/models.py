@@ -195,8 +195,6 @@ class Policy(models.Model):
         verbose_name_plural = "Policies"
 
 
-# TODO: add compliance
-# TODO: add knowledge base
 class KnowledgeBase(models.Model):
     """Class representing policies"""
     user = models.ForeignKey(
@@ -215,8 +213,13 @@ class KnowledgeBase(models.Model):
     department = models.ForeignKey(
         Department,
         on_delete=models.CASCADE,
-        related_name='policy_department',
+        related_name='knowledge_department',
         null=True, blank=True)
+    linked_policy = models.ForeignKey(
+        Policy,
+        on_delete=models.SET_NULL,
+        null=True, blank=True,
+        related_name='linked_policy')
     verified_by = models.ForeignKey(
         User, on_delete=models.SET_NULL, related_name='verified_knowledge',
         null=True, blank=True)
@@ -245,8 +248,10 @@ class KnowledgeBase(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return f'{self.title} {self.document_type} {self.version}'
+        return f'{self.knowledge_title} {self.version}'
 
     class Meta:
         verbose_name = "Knowledge Base"
         verbose_name_plural = "Knowledge Base"
+
+# TODO: add compliance

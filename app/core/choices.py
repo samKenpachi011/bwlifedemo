@@ -1,12 +1,12 @@
 from django.utils.translation import gettext_lazy as _
 
 DOCUMENT_TYPE = (
-        ('article', 'Article'),
-        ('conference_paper', 'Conference paper'),
-        ('research_paper', 'Research paper'),
-        ('book', 'Book'),
-        ('chapter', 'Chapter'),
-    )
+    ('article', 'Article'),
+    ('conference_paper', 'Conference paper'),
+    ('research_paper', 'Research paper'),
+    ('book', 'Book'),
+    ('chapter', 'Chapter'),
+)
 
 
 ONBOARDING_TYPE = (
@@ -17,11 +17,11 @@ ONBOARDING_TYPE = (
 )
 
 STATUS_CHOICES = (
-        ('draft', _('Pending Verification')),
-        ('vetting', _('Vetting')),
-        ('verified', _('Verified')),
-        ('published', _('Published')),
-    )
+    ('draft', _('Pending Verification')),
+    ('vetting', _('Vetting')),
+    ('verified', _('Verified')),
+    ('published', _('Published')),
+)
 
 KNOWLEDGE_CATEGORY = (
     ('onboarding', _('Onboarding')),
