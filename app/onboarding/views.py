@@ -30,10 +30,8 @@ from drf_spectacular.utils import (
 class OnboardingViewSet(viewsets.ModelViewSet):
     """View for managing Onboarding information"""
     parser_classes = (MultiPartParser, FormParser)
-    serializer_class = serializers.OnboardingDetailsSerializer
-    # queryset = Onboarding.objects.prefetch_related('onboardingsteps', 'images').select_related('department')
+    serializer_class = serializers.OnboardingSerializer
     queryset = Onboarding.objects.prefetch_related('onboardingstep')
-    # queryset = Onboarding.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -43,6 +41,8 @@ class OnboardingViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         """Return a serializer class for the request"""
+        if self.action in ['retrieve', 'update', 'partial_update']:
+            return serializers.OnboardingDetailsSerializer
         if self.action == 'list':
             return serializers.OnboardingSerializer
 

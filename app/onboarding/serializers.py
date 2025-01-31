@@ -3,7 +3,7 @@
 from rest_framework import serializers
 from core.models import (
     Onboarding, OnboardingNoteImages,
-    OnboardingStep, OnboardingStepImages)
+    OnboardingStep, OnboardingStepImages, Department)
 # import logging
 
 # logger = logging.getLogger(__name__)
@@ -32,6 +32,14 @@ class OnboardingStepSerializer(serializers.ModelSerializer):
         read_only_fields = ['id']
 
 
+class DepartmentSerializer(serializers.ModelSerializer):
+    """Serializer for Department"""
+    class Meta:
+        model = Department
+        fields = ['id', 'dept_name', 'description']
+        read_only_fields = ['id']
+
+
 class OnboardingSerializer(serializers.ModelSerializer):
 
     images = OnboardingImagesSerializer(
@@ -45,10 +53,14 @@ class OnboardingSerializer(serializers.ModelSerializer):
     onboardingstep = OnboardingStepSerializer(
         many=True, required=False)
 
+    department = DepartmentSerializer(read_only=True)
+    description = serializers.CharField(required=False)
+
     class Meta:
         model = Onboarding
         fields = ['id', 'onboarding_name', 'images',
-                  'uploaded_images', 'onboardingstep']
+                  'uploaded_images', 'onboardingstep',
+                  'department', 'description']
         read_only_fields = ['id']
 
     def create(self, validated_data):
@@ -56,7 +68,11 @@ class OnboardingSerializer(serializers.ModelSerializer):
         images = validated_data.pop('uploaded_images', None)
 
         steps_data = validated_data.pop('onboardingstep', [])
+        description = validated_data.pop('description', None)
         note = Onboarding.objects.create(**validated_data)
+        if description:
+            note.description = description
+            note.save()
 
         auth_user = self.context['request'].user
 
@@ -78,9 +94,13 @@ class OnboardingSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         """Override Onboarding update"""
         steps_data = validated_data.pop('onboardingstep', [])
+        description = validated_data.get('description', None)
         user = self.context['request'].user
         for attr, value, in validated_data.items():
             setattr(instance, attr, value)
+
+        if description:
+            instance.description = description
 
         instance.save()
 
@@ -104,9 +124,8 @@ class OnboardingDetailsSerializer(OnboardingSerializer):
 
     class Meta(OnboardingSerializer.Meta):
         fields = OnboardingSerializer.Meta.fields + [
-            'department', 'status', 'onboarding_type',
-            'notes',
-            'created_at', 'updated_at',]
+            'department', 'description', 'status', 'onboarding_type',
+            'notes', 'created_at', 'updated_at']
 
 
 class OnboardingStepDetailsSerializer(OnboardingStepSerializer):
